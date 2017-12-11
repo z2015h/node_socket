@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<script src="vendor/socket.io.js"></script>
+
+<body>
+  <input type="text" id="message">
+  <button onclick="sub()">发送</button>
+</body>
+<script>
+var socketService = io.connect('http://127.0.0.1:3000');
+socketService.emit('regist', {
+  'Id': 2
+}, function(data) {
+  socketService.on('s:send', function(data) {
+    console.log(data)
+  });
+});
+
+
+function sub() {
+  socketService.emit('c:send', {
+    targetId: 1,
+    from: 2,
+    content: document.querySelector('#message').value
+  }, function(data) {
+    console.log(data)
+  });
+}
+</script>
+
+</html>

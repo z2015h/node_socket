@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<script src="javascripts/record.js"></script>
+<body>
+  <video src="" id="video" width="800" height="800" autoplay></video>
+  <video src="" id="video2" width="800" height="400" autoplay></video>
+  <button onclick="startRecording()">录制</button>
+  <button onclick="stopRecording()">停止</button>
+  <button onclick="pause()">暂停</button>
+  <button onclick="play()">播放</button>
+</body>
+<script>
+var video = document.getElementById('video');
+var media;
+var stream;
+var recordedBlobs;
+var getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+
+  var options = {
+    video: document.getElementById('video'),
+    video2: document.getElementById('video2'),
+    handstop: function(e) {
+    	console.log('停止录制');
+    }
+  }
+
+
+var recordItem = new recorder(options);
+function handleDataAvailable(event) {
+  if (event.data && event.data.size > 0) {
+    recordedBlobs.push(event.data);
+  }
+}
+
+function handleStop(event) {
+  console.log('录制停止');
+}
+
+function startRecording() {
+	recordItem.startRecorder()
+  // getUserMedia.call(navigator, {
+  //   video: true,
+  //   audio: true
+  // }, function(localMediaStream) {
+  //   stream = localMediaStream;
+  //   video.src = window.URL.createObjectURL(stream);
+  //   var options = {
+  //     mimeType: 'video/webm',
+  //     bitsPerSecond: 1000000
+  //   };
+  //   recordedBlobs = [];
+  //   try {
+  //     mediaRecorder = new MediaRecorder(stream, options);
+  //   } catch (e0) {
+  //     try {
+  //       options = {
+  //         mimeType: 'video/webm,codecs=vp9',
+  //         bitsPerSecond: 1000000
+  //       };
+  //       mediaRecorder = new MediaRecorder(stream, options);
+  //     } catch (e1) {
+  //       try {
+  //         options = 'video/vp8';
+  //         mediaRecorder = new MediaRecorder(stream, options);
+  //       } catch (e2) {
+  //         return;
+  //       }
+  //     }
+  //   }
+  //   mediaRecorder.onstop = handleStop;
+  //   mediaRecorder.ondataavailable = handleDataAvailable;
+  //   mediaRecorder.start(10); // collect 10ms of data
+  // }, function(e) {
+  //   console.log('Reeeejected!', e);
+  // })
+}
+
+function stopRecording() {
+	recordItem.stopRecorder()
+  // var tracks = stream.getTracks();
+  // for (var i = 0; i < tracks.length; i++) {
+  //   tracks[i].stop();
+  // }
+  // mediaRecorder.stop();
+}
+
+function pause() {
+   recordItem.pause();
+}
+
+function play() {
+	recordItem.play();
+  // var superBuffer = new Blob(recordedBlobs, {
+  //   type: 'video/webm'
+  // });
+  // video2.src = window.URL.createObjectURL(superBuffer);
+  // console.log('开始播放');
+}
+</script>
+
+</html>
